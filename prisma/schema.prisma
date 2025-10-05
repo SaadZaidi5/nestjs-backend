@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  fullName  String
+  email     String    @unique
+  password  String
+  role      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  
+  products       Product[]
+  customerOrders Order[]     @relation("CustomerOrders")
+  vendorItems    OrderItem[] @relation("VendorOrderItems")
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  price       Float
+  stock       Int
+  vendorId    Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  vendor      User          @relation(fields: [vendorId], references: [id])
+  images      ProductImage[]
+  orderItems  OrderItem[]   // Add this
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  url       String
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  orderNumber     String      @unique
+  customerId      Int
+  totalAmount     Float
+  status          String      @default("pending") // pending, confirmed, shipped, delivered, cancelled
+  shippingAddress String
+  shippingCity    String
+  shippingZip     String
+  shippingCountry String
+  paymentMethod   String      @default("cod") // cod, stripe
+  paymentStatus   String      @default("pending") // pending, paid, failed
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @default(now()) @updatedAt
+
+  customer        User        @relation("CustomerOrders", fields: [customerId], references: [id])
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  orderId     Int
+  productId   Int
+  quantity    Int
+  price       Float   // Store price at time of order
+  vendorId    Int
+
+  order       Order   @relation(fields: [orderId], references: [id])
+  product     Product @relation(fields: [productId], references: [id])
+  vendor      User    @relation("VendorOrderItems", fields: [vendorId], references: [id])
+}
+
+enum Role {
+  CUSTOMER
+  VENDOR
+  ADMIN
+}

@@ -8,6 +8,8 @@ async function bootstrap() {
       'http://localhost:3000',
       'https://mathilda-horotelic-euclid.ngrok-free.dev',
       'https://marketplace-frontend-live.vercel.app',
+      'https://nexbazaar.shop', // your live domain
+      'https://www.nexbazaar.shop', // optional, in case people use the www version
     ], // Your Next.js frontend URL
     credentials: true,
   });

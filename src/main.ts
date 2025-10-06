@@ -7,6 +7,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:3000',
       'https://mathilda-horotelic-euclid.ngrok-free.dev',
+      'https://marketplace-frontend-live.vercel.app',
     ], // Your Next.js frontend URL
     credentials: true,
   });

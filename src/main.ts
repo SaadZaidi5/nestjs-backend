@@ -3,8 +3,13 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.enableCors({
-    origin: 'http://localhost:3000', // Your Next.js frontend URL
+    origin: [
+      'https://nexbazaar.shop',
+      'https://www.nexbazaar.shop',
+      'http://localhost:3000', // keep this for local dev
+    ],
     credentials: true,
   });
 

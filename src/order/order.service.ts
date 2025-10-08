@@ -4,6 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { OrderStatus } from '@prisma/client';
 
 export interface CreateOrderDto {
   items: Array<{
@@ -220,7 +221,7 @@ export class OrderService {
 
     return this.prisma.order.update({
       where: { id: orderId },
-      data: { status },
+      data: { status: status as OrderStatus }, // Cast to enum type
       include: {
         items: {
           include: {

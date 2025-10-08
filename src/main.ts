@@ -4,17 +4,12 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'https://mathilda-horotelic-euclid.ngrok-free.dev',
-      'https://marketplace-frontend-live.vercel.app',
-      'https://nexbazaar.shop', // your live domain
-      'https://www.nexbazaar.shop', // optional, in case people use the www version
-    ], // Your Next.js frontend URL
+    origin: 'http://localhost:3000', // Your Next.js frontend URL
     credentials: true,
   });
 
-  const port = process.env.PORT || 8000;
-  await app.listen(port);
+  await app.listen(process.env.PORT ?? 8000);
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Error during app bootstrap:', err);
+});

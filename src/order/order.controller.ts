@@ -25,7 +25,7 @@ export class OrderController {
 
   @Post()
   async create(@Req() req: AuthenticatedRequest, @Body() dto: CreateOrderDto) {
-    if (req.user.role !== 'customer') {
+    if (req.user.role !== 'CUSTOMER') {
       throw new ForbiddenException('Only customers can create orders');
     }
     return await this.orderService.createOrder(req.user.userId, dto);
@@ -62,7 +62,7 @@ export class OrderController {
     @Param('id') id: string,
     @Body('status') status: string,
   ) {
-    if (req.user.role !== 'vendor') {
+    if (req.user.role !== 'VENDOR') {
       throw new ForbiddenException('Only vendors can update order status');
     }
     return await this.orderService.updateOrderStatus(

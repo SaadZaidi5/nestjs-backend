@@ -43,7 +43,7 @@ export class ProductController {
     @Req() req: AuthenticatedRequest,
     @Body() dto: CreateProductDto,
   ) {
-    if (req.user.role !== 'vendor') {
+    if (req.user.role !== 'VENDOR') {
       throw new ForbiddenException('Only vendors can create products');
     }
 
@@ -54,7 +54,7 @@ export class ProductController {
   @UseGuards(AuthGuard)
   @Get('vendor')
   async findAllByVendor(@Req() req: AuthenticatedRequest) {
-    if (req.user.role !== 'vendor') {
+    if (req.user.role !== 'VENDOR') {
       throw new ForbiddenException('Only vendors can view their products');
     }
     return await this.productService.getVendorProducts(req.user.userId);
@@ -74,7 +74,7 @@ export class ProductController {
     @Param('id') id: string,
     @Body() dto: UpdateProductDto,
   ) {
-    if (req.user.role !== 'vendor') {
+    if (req.user.role !== 'VENDOR') {
       throw new ForbiddenException('Only vendors can update products');
     }
     return await this.productService.updateProduct(
@@ -88,7 +88,7 @@ export class ProductController {
   @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Req() req: AuthenticatedRequest, @Param('id') id: string) {
-    if (req.user.role !== 'vendor') {
+    if (req.user.role !== 'VENDOR') {
       throw new ForbiddenException('Only vendors can delete products');
     }
     return await this.productService.deleteProduct(Number(id), req.user.userId);

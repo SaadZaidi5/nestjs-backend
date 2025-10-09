@@ -34,7 +34,7 @@ export class OrderController {
   // Get customer's orders
   @Get('customer')
   async getCustomerOrders(@Req() req: AuthenticatedRequest) {
-    if (req.user.role !== 'customer') {
+    if (req.user.role !== 'CUSTOMER') {
       throw new ForbiddenException('Only customers can view their orders');
     }
     return await this.orderService.getCustomerOrders(req.user.userId);
@@ -43,7 +43,7 @@ export class OrderController {
   // Get vendor's orders
   @Get('vendor')
   async getVendorOrders(@Req() req: AuthenticatedRequest) {
-    if (req.user.role !== 'vendor') {
+    if (req.user.role !== 'VENDOR') {
       throw new ForbiddenException('Only vendors can view their orders');
     }
     return await this.orderService.getVendorOrders(req.user.userId);
